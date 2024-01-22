@@ -34,7 +34,7 @@ public class User
             }
             else
             {
-                Console.WriteLine("Invalid email or already in use. Please enter a valid and unique email.");
+                
             }
         }
     }

@@ -5,18 +5,44 @@ namespace ControlWork_Komar
     public class Application
     {
         private ObservableCollection<User> Users { get; set; }
-
+        private Timer auto_save;
         public Application()
         {
             Users = new ObservableCollection<User>();
+            auto_save = new Timer(AutoSave, null, 0, 10000);
+            LoadUsersFromFile();
+        }
+        private void AutoSave(object sender)
+        {
+            ObservableCollection<User> tmp = MyFile.LoadUsersFromFile("UserDetails.json");
+
+            bool isDifferent = false;
+            if (Users.Count != tmp.Count)
+                isDifferent = true;
+            else
+            {
+                for (int i = 0; i < Users.Count; i++)
+                {
+                    if (!Users[i].Equals(tmp[i]))
+                    {
+                        isDifferent = true;
+                        break;
+                    }
+
+                }
+            }
+            if (isDifferent)
+                SaveUsersToFile();
+
 
         }
-
         public void Run()
         {
             while (true)
             {
+                
                 LoadUsersFromFile();
+                
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\n1. Add User");
                 Console.WriteLine("2. Edit User");
